@@ -6,9 +6,23 @@ Projet des chefs
 
 Comment le Parser va marcher 
 
-ATMcp
+exemple d'entrÃ©e JSON
 
-modifié
 ```
-Exemple de pute   hgg
+{
+ "id": 24717,
+ "cuisine": "indian",
+ "ingredients": [
+     "tumeric",
+     "vegetable stock",
+     "tomatoes",
+     "garam masala",
+     "naan",
+     "red lentils",
+     "red chili peppers",
+     "onions",
+     "spinach",
+     "sweet potatoes"
+ ]
+ },
 ```
