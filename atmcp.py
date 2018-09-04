@@ -70,20 +70,28 @@ test_x,test_y=binary_ingredients[int(0.8*len(binary_ingredients)):len(binary_ing
 
 import matplotlib.pyplot as plt
 
-rate=0.2
+rate=1
+
+#les listes bis sont la pour pas avoir a relancer le bloc au dessus a chaque changement de rate
 
 train_x_bis,train_y_bis,test_x_bis,test_y_bis=train_x[:int(rate*len(train_x))],train_y[:int(rate*len(train_y))],test_x[:int(rate*len(test_x))],test_y[:int(rate*len(test_y))]
 
 import tensorflow as tf
 
-n_nodes_hl1=1000
-n_nodes_hl2=1000
-n_nodes_hl3=500
-n_nodes_hl4=500
+#changement du nombre de neurones par couche
 
+n_nodes_hl1=2000
+n_nodes_hl2=2000
+n_nodes_hl3=2000
+n_nodes_hl4=2000
+n_nodes_hl5=2000
+
+#probabilite de garder le neurone lors du dropout (evite aux poids d aller vers l infini)
 dropout_rate=0.9
 
 n_classes=len(train_y[0])
+
+#taille des batchs
 batch_size=100
 
 x=tf.placeholder('float',[None,len(train_x[0])])
@@ -99,7 +107,9 @@ def neural_network_model(data):
                     'biases':tf.Variable(tf.random_normal([n_nodes_hl3]))}
     hidden_4_layer={'weights':tf.Variable(tf.random_normal([n_nodes_hl3,n_nodes_hl4])),
                     'biases':tf.Variable(tf.random_normal([n_nodes_hl4]))}
-    output_layer={'weights':tf.Variable(tf.random_normal([n_nodes_hl4,n_classes])),
+    hidden_5_layer={'weights':tf.Variable(tf.random_normal([n_nodes_hl4,n_nodes_hl5])),
+                    'biases':tf.Variable(tf.random_normal([n_nodes_hl5]))}
+    output_layer={'weights':tf.Variable(tf.random_normal([n_nodes_hl5,n_classes])),
                     'biases':tf.Variable(tf.random_normal([n_classes]))}
     
     l1=tf.add(tf.matmul(data,hidden_1_layer['weights']),hidden_1_layer['biases'])
@@ -118,15 +128,20 @@ def neural_network_model(data):
     l4=tf.nn.relu(l4)
     l4=tf.nn.dropout(l4, dropout_rate)
     
-    output=tf.add(tf.matmul(l4,output_layer['weights']),output_layer['biases'])
+    l5=tf.add(tf.matmul(l4,hidden_5_layer['weights']),hidden_5_layer['biases'])
+    l5=tf.nn.relu(l5)
+    l5=tf.nn.dropout(l5, dropout_rate)
+    
+    output=tf.add(tf.matmul(l5,output_layer['weights']),output_layer['biases'])
 
     return(output)
     
 def train_neural_network(x):
+    #Acc c est l historique des accuracy
     Acc=[]
+    #def du RN de la fct de cout et de la descente du gradient
     prediction=neural_network_model(x)
     cost=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y))
-    
     optimizer=tf.train.AdamOptimizer().minimize(cost)
     
     hm_epochs=40
@@ -138,6 +153,8 @@ def train_neural_network(x):
             epoch_loss=0
             
             i=0
+            #on train par batch, ca peut etre bien de randomiser le choix des indices de batch sachant que 
+            #pour le moment on les prend juste les uns a la suite des autres 
             while i<len(train_x_bis):
                 start=i
                 end=i+batch_size
@@ -148,7 +165,7 @@ def train_neural_network(x):
                 _ , c=sess.run([optimizer,cost],feed_dict={x:batch_x,y:batch_y})
                 epoch_loss+=c
                 i+=batch_size
-                
+            #on peut recuperer l historique des loss ici de la meme maniere qu avec accuracy   
             print('Epoch',epoch,'completed out of', hm_epochs,'loss',epoch_loss)
                 
             
@@ -158,7 +175,8 @@ def train_neural_network(x):
             a=accuracy.eval({x:test_x_bis,y:test_y_bis})
             Acc.append(a)
             print('Accuracy :',a)
-            
+    #le trace de la courbe, ce qui pourrait etre bien c est d avoir un trace qui s actualise (dans l absolue
+    #je sais pas faire)
     plt.plot(Acc)
             
 train_neural_network(x)
