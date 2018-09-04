@@ -70,15 +70,15 @@ test_x,test_y=binary_ingredients[int(0.8*len(binary_ingredients)):len(binary_ing
 
 import matplotlib.pyplot as plt
 
-rate=0.01
+rate=0.2
 
 train_x_bis,train_y_bis,test_x_bis,test_y_bis=train_x[:int(rate*len(train_x))],train_y[:int(rate*len(train_y))],test_x[:int(rate*len(test_x))],test_y[:int(rate*len(test_y))]
 
 import tensorflow as tf
 
-n_nodes_hl1=3000
-n_nodes_hl2=2000
-n_nodes_hl3=1000
+n_nodes_hl1=1000
+n_nodes_hl2=1000
+n_nodes_hl3=500
 n_nodes_hl4=500
 
 dropout_rate=0.9
@@ -129,7 +129,7 @@ def train_neural_network(x):
     
     optimizer=tf.train.AdamOptimizer().minimize(cost)
     
-    hm_epochs=60
+    hm_epochs=40
     
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
