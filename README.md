@@ -27,7 +27,7 @@ exemple d'entrée JSON
  },
 ```
 
-##Traitement de la BDD
+## Traitement de la BDD
 
 J'ai directement travaillé sur du pandas.
 create_lexicon te crée les deux listes qui répertories tous les types de cuisines et d'ingrédients.
@@ -37,7 +37,7 @@ j'avais envie de tester le rn rapidement mais faudrait le changer pour que ca so
 A noter que le json test ne contient pas de target donc les listes tests utilisées pour tester
 le réseaux proviennent enfait du train qui est partitionné à proportion de 80/20.
 
-##RN
+## RN
 
 4 couches
 
