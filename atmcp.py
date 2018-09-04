@@ -68,16 +68,20 @@ test_x,test_y=binary_ingredients[int(0.8*len(binary_ingredients)):len(binary_ing
 
 #%%
 
+import matplotlib.pyplot as plt
+
 rate=0.01
 
 train_x_bis,train_y_bis,test_x_bis,test_y_bis=train_x[:int(rate*len(train_x))],train_y[:int(rate*len(train_y))],test_x[:int(rate*len(test_x))],test_y[:int(rate*len(test_y))]
 
 import tensorflow as tf
 
-n_nodes_hl1=500
-n_nodes_hl2=500
-n_nodes_hl3=500
+n_nodes_hl1=3000
+n_nodes_hl2=2000
+n_nodes_hl3=1000
 n_nodes_hl4=500
+
+dropout_rate=0.9
 
 n_classes=len(train_y[0])
 batch_size=100
@@ -100,31 +104,32 @@ def neural_network_model(data):
     
     l1=tf.add(tf.matmul(data,hidden_1_layer['weights']),hidden_1_layer['biases'])
     l1=tf.nn.relu(l1)
-    l1=tf.nn.dropout(l1, 0.8)
+    l1=tf.nn.dropout(l1, dropout_rate)
     
     l2=tf.add(tf.matmul(l1,hidden_2_layer['weights']),hidden_2_layer['biases'])
     l2=tf.nn.relu(l2)
-    l2=tf.nn.dropout(l2, 0.8)
+    l2=tf.nn.dropout(l2, dropout_rate)
     
     l3=tf.add(tf.matmul(l2,hidden_3_layer['weights']),hidden_3_layer['biases'])
     l3=tf.nn.relu(l3)
-    l3=tf.nn.dropout(l3, 0.8)
+    l3=tf.nn.dropout(l3, dropout_rate)
     
     l4=tf.add(tf.matmul(l3,hidden_4_layer['weights']),hidden_4_layer['biases'])
     l4=tf.nn.relu(l4)
-    l4=tf.nn.dropout(l4, 0.8)
+    l4=tf.nn.dropout(l4, dropout_rate)
     
     output=tf.add(tf.matmul(l4,output_layer['weights']),output_layer['biases'])
 
     return(output)
     
 def train_neural_network(x):
+    Acc=[]
     prediction=neural_network_model(x)
     cost=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y))
     
     optimizer=tf.train.AdamOptimizer().minimize(cost)
     
-    hm_epochs=20
+    hm_epochs=60
     
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
@@ -150,7 +155,11 @@ def train_neural_network(x):
             correct=tf.equal(tf.argmax(prediction,1),tf.argmax(y,1))
             
             accuracy=tf.reduce_mean(tf.cast(correct,'float'))
-            print('Accuracy :',accuracy.eval({x:test_x_bis,y:test_y_bis}))
+            a=accuracy.eval({x:test_x_bis,y:test_y_bis})
+            Acc.append(a)
+            print('Accuracy :',a)
+            
+    plt.plot(Acc)
             
 train_neural_network(x)
 
