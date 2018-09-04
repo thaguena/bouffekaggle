@@ -64,11 +64,13 @@ binary_ingredients,binary_cuisine=create_arrays(lexicon_ingredients,lexicon_cuis
 
 train_x,train_y=binary_ingredients[:int(0.8*len(binary_ingredients))],binary_cuisine[:int(0.8*len(binary_cuisine))]
 
-test_x,test_y=binary_ingredients[int(0.8*len(binary_ingredients)):len(binary_ingredients)],binary_cuisine[:int(0.8*len(binary_cuisine)):len(binary_cuisine)]
+test_x,test_y=binary_ingredients[int(0.8*len(binary_ingredients)):len(binary_ingredients)],binary_cuisine[int(0.8*len(binary_cuisine)):len(binary_cuisine)]
 
 #%%
 
-train_x,train_y,test_x,test_y=train_x[:int(0.2*len(train_x))],train_y[:int(0.2*len(train_y))],test_x[:int(0.2*len(test_x))],test_y[:int(0.2*len(test_y))]
+rate=0.01
+
+train_x_bis,train_y_bis,test_x_bis,test_y_bis=train_x[:int(rate*len(train_x))],train_y[:int(rate*len(train_y))],test_x[:int(rate*len(test_x))],test_y[:int(rate*len(test_y))]
 
 import tensorflow as tf
 
@@ -122,7 +124,7 @@ def train_neural_network(x):
     
     optimizer=tf.train.AdamOptimizer().minimize(cost)
     
-    hm_epochs=10
+    hm_epochs=20
     
     with tf.Session() as sess:
         sess.run(tf.initialize_all_variables())
@@ -131,12 +133,12 @@ def train_neural_network(x):
             epoch_loss=0
             
             i=0
-            while i<len(train_x):
+            while i<len(train_x_bis):
                 start=i
                 end=i+batch_size
                 
-                batch_x=np.array(train_x[start:end])
-                batch_y=np.array(train_y[start:end])
+                batch_x=np.array(train_x_bis[start:end])
+                batch_y=np.array(train_y_bis[start:end])
                 
                 _ , c=sess.run([optimizer,cost],feed_dict={x:batch_x,y:batch_y})
                 epoch_loss+=c
@@ -148,7 +150,7 @@ def train_neural_network(x):
             correct=tf.equal(tf.argmax(prediction,1),tf.argmax(y,1))
             
             accuracy=tf.reduce_mean(tf.cast(correct,'float'))
-            print('Accuracy :',accuracy.eval({x:test_x,y:test_y}))
+            print('Accuracy :',accuracy.eval({x:test_x_bis,y:test_y_bis}))
             
 train_neural_network(x)
 
