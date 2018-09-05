@@ -55,7 +55,7 @@ voulais test d'autres choses)
 ## Partie Keras
 
 J'ai ajouté une parie qui convertit les liste an np.ndarray pour pouvoir utiliser keras
-j'ai essayer de construire un RN avec keras pour m'entrainer, j'ai aucune idée de si ca a vraiment marché ou si c'est du bullshit les resultats
+j'ai essayer de construire un RN avec keras pour m'entrainer, j'ai aucune idée de si ca a vraiment marché ou si c'est du bullshit les resultats mais en tous cas pour garder des traces de mes essais
 j'ai rajouté les figures de resultats dans un nouveau dossier avec la convention :
 ```
 keras_<nbepoch>e_<batchSize>b_<structureDuRN>
