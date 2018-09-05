@@ -52,5 +52,11 @@ RN 5 couches : 2000*5 moins performant sur les 10 premieres epochs qu'un RN 3 co
 3000/3000/2000 sur l'ensemble des données (7 eme epoch 57% je suis pas allé plus loin c'était long et je
 voulais test d'autres choses)
 
+## Partie Keras
 
-
+J'ai ajouté une parie qui convertit les liste an np.ndarray pour pouvoir utiliser keras
+j'ai essayer de construire un RN avec keras pour m'entrainer, j'ai aucune idée de si ca a vraiment marché ou si c'est du bullshit les resultats
+j'ai rajouté les figures de resultats dans un nouveau dossier avec la convention :
+```
+keras_<nbepoch>e_<batchSize>b_<structureDuRN>
+```
