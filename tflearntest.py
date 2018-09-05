@@ -16,16 +16,16 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 # For example, running this (by clicking run or pressing Shift+Enter) will list the files in the input directory
 
 import os
-print(os.listdir("../input"))
+print(os.listdir("../"))
 
 import json
 
-with open("../input/train.json") as f:
+with open("../Tim/Desktop/tensorflow/bouffekaggle/all/train.json") as f:
     data = json.load(f)
     
 train = pd.DataFrame(data)
 
-with open("../input/test.json") as f:
+with open("../Tim/Desktop/tensorflow/bouffekaggle/all/test.json") as f:
     data = json.load(f)
     
 test = pd.DataFrame(data)
@@ -85,32 +85,32 @@ reset_default_graph()
 convnet=input_data(shape=[None,len(train_x[0])],name='input')
 
 convnet=fully_connected(convnet,2000,activation='relu')
-convnet=dropout(convnet,0.😎
+convnet=dropout(convnet,0.7)
 
 convnet=fully_connected(convnet,2000,activation='relu')
-convnet=dropout(convnet,0.😎
+convnet=dropout(convnet,0.7)
 
 convnet=fully_connected(convnet,1000,activation='relu')
-convnet=dropout(convnet,0.😎
+convnet=dropout(convnet,0.7)
 
 convnet=fully_connected(convnet,1000,activation='relu')
-convnet=dropout(convnet,0.😎
+convnet=dropout(convnet,0.7)
 #
 #convnet=fully_connected(convnet,1024,activation='relu')
-#convnet=dropout(convnet,0.😎
+#convnet=dropout(convnet,0.8)
 
 convnet=fully_connected(convnet,20,activation='softmax')
 
 convnet=regression(convnet,optimizer='adam',learning_rate=0.002,loss='categorical_crossentropy',name='targets')
 
-model=tflearn.DNN(convnet,max_checkpoints=1, tensorboard_verbose=0)
+model=tflearn.DNN(convnet,max_checkpoints=1,tensorboard_dir="../Tim/Desktop/tensorflow/bouffekaggle/tflearn_logs/", tensorboard_verbose=0)
 
-model.fit({'input':train_x},{'targets':train_y},n_epoch=5,
+model.fit({'input':train_x},{'targets':train_y},n_epoch=1,
           snapshot_step=1000,show_metric=True,run_id='cuisine')
 
-model.save('tflearncnn.model')
+model.save('../Tim/Desktop/tensorflow/bouffekaggle/tflearncnn.model')
 
-model.load('tflearncnn.model')
+model.load('../Tim/Desktop/tensorflow/bouffekaggle/tflearncnn.model')
 
 #%%
 
@@ -144,4 +144,4 @@ test['cuisine']=liste_results
 
 my_submission = pd.DataFrame({'id': test.id, 'cuisine': test.cuisine})
 # you could use any filename. We choose submission here
-my_submission.to_csv('submission.csv', index=False)
+my_submission.to_csv('../Tim/Desktop/tensorflow/bouffekaggle/sub/submission.csv', index=False)
