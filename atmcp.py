@@ -259,8 +259,8 @@ def train(epochs=1, batch_size=128):
     
     history = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(x_test,y_test), verbose = 2)
     plt.figure(0)
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
+    plt.plot(history.history['categorical_accuracy'])
+    plt.plot(history.history['val_categorical_accuracy'])
     plt.title('model accuracy')
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
